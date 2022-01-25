@@ -19,3 +19,31 @@ console.log(path.basename(fullPath));
 
 //возвращает расширение
 console.log(path.extname(fullPath));
+
+
+////////////////////////////URL///////
+
+
+const siteUrl = 'http://localhost:8000/users?id=123';
+
+//для папрсинга URL строки запроса при работе сервера
+//можно использовать этот метод
+const url = new URL(siteUrl);
+
+//мы получим большой объект описывающий строку
+// {
+//     href: 'http://localhost:8000/users?id=123',
+//     origin: 'http://localhost:8000',
+//     protocol: 'http:',
+//     username: '',
+//     password: '',
+//     host: 'localhost:8000',
+//     hostname: 'localhost',
+//     port: '8000',
+//     pathname: '/users',
+//     search: '?id=123',
+//     searchParams: URLSearchParams { 'id' => '123' },
+//     hash: ''
+//   }
+
+console.log(url);
