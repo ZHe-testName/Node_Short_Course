@@ -1,0 +1,25 @@
+{
+  "name": "node_short_course",
+  "version": "1.0.0",
+  "description": "Node short course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZHe-testName/Node_Short_Course.git"
+  },
+  "author": "Ejen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZHe-testName/Node_Short_Course/issues"
+  },
+  "homepage": "https://github.com/ZHe-testName/Node_Short_Course#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
