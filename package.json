@@ -4,7 +4,7 @@
   "description": "Node short course",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./lessons/process.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/ZHe-testName/Node_Short_Course#readme",
   "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^14.3.0",
     "express": "^4.17.2"
   },
   "devDependencies": {
