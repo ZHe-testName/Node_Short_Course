@@ -44,8 +44,65 @@ const server = http.createServer((req, res) => {
     //     'Content-type': 'text/html; charset="utf8"'
     // });
     //метод отправки данных пользователю для закрития стрима
-    //можно использовать для серверсайд рендеримнга
+    //можно использовать для серверсайд рендеринга
     // res.end('<h1>Hello from server!!!<button>Click Me</button></h1>');
+
+    //Свой фреймворк для работы с сервером\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+    const EventEmitter = require('');
+
+    const emitter = new EventEmitter();
+
+    class Router {
+        constructor(){
+            this.endpoints = {};
+        }
+
+        request(method = 'GET', path, handler){
+            if(!this.endpoints[path]){
+                this.endpoints[path] = {};
+            };
+
+            const endpoint = this.endpoints[path];
+
+            if(endpoint[method]){
+                throw new Error(`[${method}] with adress ${path} already exist`)
+            };
+
+            endpoint[method] = handler;
+
+            emitter.on(`[${path}]: [${method}]`, (req, res) => {
+                handler(req, res);
+            });
+        }
+
+        //для абстракции чтобы не передавать посоянно строку метода
+        get(path, handler){
+            this.request('GET', path, handler);
+        }
+
+        put(path, handler){
+            this.request('PUT', path, handler);
+        }
+
+        post(path, handler){
+            this.request('POST', path, handler);
+        }
+
+        delete(path, handler){
+            this.request('DELETE', path, handler);
+        }
+    };
+
+    const router = new Router();
+
+    router.get('/users', (req, res) => {
+        res.send('YOU SEND MESSAGE TO /USERS');
+    });
+
+    router.get('/posts', (req, res) => {
+        res.send('YOU SEND MESSAGE TO /POSTS');
+    });
 
     //req.url
     //содержит в себе состояние сторки запроса после слеша
