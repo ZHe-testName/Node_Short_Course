@@ -32,25 +32,20 @@
 // });
 
 const Application = require('./framework/Application');
-const Router = require('./framework/Router');
+const userRouter = require('./src/user_router');
+const jsonParser = require('./framework/parse_json');
 
 //для инициализации переменных в файле .env
 require('dotenv').config();
 const PORT = process.env.PORT || '3000';
 
 const app = new Application();
-const router = new Router();
 
-router.get('/users', (req, res) => {
-    res.end('YOU SEND MESSAGE TO /USERS');
-});
-
-router.get('/posts', (req, res) => {
-    res.end('YOU SEND MESSAGE TO /POSTS');
-});
+//добавляем JSON парсер
+app.use(jsonParser);
 
 //добавляем роутер в наше приложение
-app.addRouter(router);
+app.addRouter(userRouter);
 
 //функция для прослушиввания входящих соединений
 app.listen(PORT, () => console.log(`Server started on PORT=${PORT}`));

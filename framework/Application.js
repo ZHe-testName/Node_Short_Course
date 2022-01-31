@@ -6,6 +6,7 @@ module.exports = class Application{
     constructor(){
         this.emitter = new EventEmitter();
         this.server = this._createServer();
+        this.middlewares = [];
     }
 
     _createServer(){
@@ -56,6 +57,10 @@ module.exports = class Application{
         return `[${url}]: [${method}]`
     }    
 
+    use (middleware){
+        this.middlewares.push(middleware);
+    }
+
     //метод для запуска сервера
     //который просто делегирует реализацию в наш сервер
     listen (port, callback){
@@ -77,10 +82,12 @@ module.exports = class Application{
             const endpoint = router.endpoints[path];
 
             //в каждом пути по всем методам пробегаемся и навешиваем слушатель
-            Object.keys(endpoint).forEach(method => {
-                const handler = endpoint[method];
-
+            Object.keys(endpoint).forEach(method => {   
                 this.emitter.on(this._createMask(path, method), (req, res) => {
+                    const handler = endpoint[method];
+
+                    this.middlewares.forEach(m => m(req, res));
+
                     handler(req, res);
                 });
             })
