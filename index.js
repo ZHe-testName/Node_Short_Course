@@ -34,7 +34,8 @@
 const Application = require('./framework/Application');
 const userRouter = require('./src/user_router');
 const jsonParser = require('./framework/parse_json');
-const urlParser = require('./framework/parse_url')
+const urlParser = require('./framework/parse_url');
+const mongoose = require('mongoose');
 
 //для инициализации переменных в файле .env
 require('dotenv').config();
@@ -51,5 +52,18 @@ app.use(urlParser(`http://localhost:${PORT}`));
 //добавляем роутер в наше приложение
 app.addRouter(userRouter);
 
-//функция для прослушиввания входящих соединений
-app.listen(PORT, () => console.log(`Server started on PORT=${PORT}`));
+//для инициализации подключения к базе данных MongoDB
+const start = async () => {
+    //трайуетч нужен для того чтобы отлавливать возможные ошибки
+    //при подключении к серверу
+    try {
+        await mongoose.connect('mongodb+srv://Eugene:1111@cluster0.efamv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
+        
+        //функция для прослушиввания входящих соединений
+        app.listen(PORT, () => console.log(`Server started on PORT=${PORT}`));
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+start();
