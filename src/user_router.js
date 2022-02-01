@@ -2,25 +2,17 @@
 //а не писать на прямую в роутере
 
 const Router = require('../framework/Router');
+const controller = require('../src/user_controller');
 
 const router = new Router();
 
-const users = [
-    {id: 1, name: 'Katya'},
-    {id: 2, name: 'Jeka'}
-];
-
-router.get('/users', (req, res) => {
-    res.send(users);
-});
+router.get('/users', controller.getUsers);
 
 //для поверки на ошибку по одинаковым путям
 // router.get('./users', (req, res) => {
 //     res.end(JSON.stringify(users));
 // });
 
-router.post('/users', (req, res) => {
-    res.send(users);
-});
+router.post('/users', controller.addUser);
 
 module.exports = router;

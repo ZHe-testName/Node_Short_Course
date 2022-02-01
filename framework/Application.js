@@ -39,16 +39,35 @@ module.exports = class Application{
             //     ]));
             // };
         
-            //генеррируем собитие для отработки запросов прои создании сервера
-            //emit возвращает булево значение для того чтобы понимать существующий ли 
-            //запрос мы передали в собитие
-            const emitterBoolean = this.emitter.emit(this._createMask(req.url, req.method), req, res);
-        
-            //для отлова не существующих запросов воспользуемся значением которое возвращет emit
-            //и просто прерываем соединение для того чтобы сервер не зависал
-            if (!emitterBoolean){
-                res.end();
-            };
+            //тело запроса может тбыть достаточно болшим
+            //по тому мы будем использовать переменную
+            let body = '';
+
+            //перед работой с запросом его сначала нужно тпрочиттать
+            //с помощю ридбл стрима
+            req.on('data', chunk => {
+                body += chunk;
+            });
+
+            //после чтения срабатывает собитие end
+            req.on('end', () => {
+                if (body){
+                    req.body = JSON.parse(body);
+                };
+
+                this.middlewares.forEach(m => m(req, res));
+                 
+                //генеррируем собитие для отработки запросов прои создании сервера
+                //emit возвращает булево значение для того чтобы понимать существующий ли 
+                //запрос мы передали в собитие
+                const emitterBoolean = this.emitter.emit(this._createMask(req.pathname, req.method), req, res);
+
+                //для отлова не существующих запросов воспользуемся значением которое возвращет emit
+                //и просто прерываем соединение для того чтобы сервер не зависал
+                if (!emitterBoolean){
+                    res.end();
+                };
+            });
         });
     }
 
@@ -85,8 +104,6 @@ module.exports = class Application{
             Object.keys(endpoint).forEach(method => {   
                 this.emitter.on(this._createMask(path, method), (req, res) => {
                     const handler = endpoint[method];
-
-                    this.middlewares.forEach(m => m(req, res));
 
                     handler(req, res);
                 });

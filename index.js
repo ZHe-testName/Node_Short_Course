@@ -34,6 +34,7 @@
 const Application = require('./framework/Application');
 const userRouter = require('./src/user_router');
 const jsonParser = require('./framework/parse_json');
+const urlParser = require('./framework/parse_url')
 
 //для инициализации переменных в файле .env
 require('dotenv').config();
@@ -43,6 +44,9 @@ const app = new Application();
 
 //добавляем JSON парсер
 app.use(jsonParser);
+
+//добавляем URL парсер
+app.use(urlParser(`http://localhost:${PORT}`));
 
 //добавляем роутер в наше приложение
 app.addRouter(userRouter);
